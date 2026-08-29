@@ -1,0 +1,1029 @@
+/* ============================================================
+   style.css — The Committee: Cosmic Dark Theme
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Cinzel:wght@400;500;600;700&display=swap');
+
+/* ── CSS Custom Properties ───────────────────────────────── */
+:root {
+  --bg-primary: #06060e;
+  --bg-secondary: #0c0c1a;
+  --bg-card: rgba(15, 15, 35, 0.6);
+  --bg-card-hover: rgba(25, 25, 55, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-glow: rgba(255, 255, 255, 0.03);
+  --text-primary: #e8e6f0;
+  --text-secondary: #9896a8;
+  --text-muted: #5c5a6e;
+  --accent-primary: #8b5cf6;
+  --accent-secondary: #6366f1;
+  --accent-glow: rgba(139, 92, 246, 0.3);
+  --accent-hot: #f43f5e;
+  --accent-warm: #f59e0b;
+  --accent-cool: #06b6d4;
+  --accent-nature: #10b981;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-ambient: 0 0 60px rgba(139, 92, 246, 0.05);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 40px var(--accent-glow);
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Reset & Base ────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── Particle Canvas (Background) ────────────────────────── */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Main Layout ─────────────────────────────────────────── */
+.app-container {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.app-header {
+  text-align: center;
+  padding: 48px 24px 24px;
+  position: relative;
+}
+
+.app-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #c4b5fd, #818cf8, #a78bfa, #f0abfc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  position: relative;
+}
+
+.app-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+
+.app-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+}
+
+.generation-counter {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+  letter-spacing: 0.1em;
+}
+
+/* ── Module Grid ─────────────────────────────────────────── */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 32px 40px;
+  flex: 1;
+  align-content: start;
+}
+
+/* ── Module Card ─────────────────────────────────────────── */
+.module-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+  animation: cardAppear 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.module-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)));
+  opacity: 0.8;
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Card pattern canvas */
+.card-pattern {
+  width: 100%;
+  height: 120px;
+  display: block;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Card content */
+.card-content {
+  padding: 20px 24px 24px;
+}
+
+.module-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.module-epithet {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.module-archetype {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--accent-primary);
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 999px;
+  padding: 4px 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.module-generation {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+  z-index: 2;
+}
+
+.module-output {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 120px;
+  overflow: hidden;
+  position: relative;
+}
+
+.module-output::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+/* Color palette display */
+.palette-display {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.palette-swatch {
+  flex: 1;
+  transition: flex 0.3s ease;
+}
+
+.palette-display:hover .palette-swatch {
+  flex: 1;
+}
+
+.palette-display:hover .palette-swatch:hover {
+  flex: 2;
+}
+
+/* Module personality bars */
+.personality-bars {
+  display: flex;
+  gap: 3px;
+  margin-top: 12px;
+}
+
+.personality-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.personality-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.personality-label {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Lineage info */
+.module-lineage {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lineage-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Convene Button ──────────────────────────────────────── */
+.convene-container {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+
+.convene-btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xl);
+  padding: 16px 40px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 24px rgba(139, 92, 246, 0.3), 0 0 80px rgba(139, 92, 246, 0.1);
+  text-transform: uppercase;
+}
+
+.convene-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 40px rgba(139, 92, 246, 0.5), 0 0 120px rgba(139, 92, 246, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.convene-btn:active {
+  transform: scale(0.98);
+}
+
+.convene-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent,
+    transparent
+  );
+  animation: rotatePulse 4s linear infinite;
+}
+
+.convene-btn.deliberating {
+  pointer-events: none;
+  animation: conveneGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes rotatePulse {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes conveneGlow {
+  from { box-shadow: 0 4px 24px rgba(139, 92, 246, 0.3), 0 0 80px rgba(139, 92, 246, 0.1); }
+  to { box-shadow: 0 8px 60px rgba(139, 92, 246, 0.6), 0 0 160px rgba(139, 92, 246, 0.3); }
+}
+
+/* ── Deliberation Theater (Modal) ────────────────────────── */
+.deliberation-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 6, 14, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.deliberation-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.deliberation-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--text-primary);
+  letter-spacing: 0.1em;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.6s ease 0.3s;
+}
+
+.deliberation-overlay.active .deliberation-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.deliberation-stage {
+  position: relative;
+  width: min(700px, 90vw);
+  height: 400px;
+}
+
+/* Proposal orbs */
+.proposal-orb {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-align: center;
+  color: #fff;
+  padding: 8px;
+  word-break: break-word;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 30px var(--orb-glow, rgba(139, 92, 246, 0.4));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.proposal-orb.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.proposal-orb.converging {
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Central fusion */
+.fusion-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.6), rgba(99, 102, 241, 0.3), transparent);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fusion-core.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: fusionPulse 1s ease-in-out infinite alternate;
+}
+
+.fusion-core.explode {
+  animation: fusionExplode 0.6s ease-out forwards;
+}
+
+@keyframes fusionPulse {
+  from { box-shadow: 0 0 40px rgba(139, 92, 246, 0.4), 0 0 80px rgba(99, 102, 241, 0.2); }
+  to { box-shadow: 0 0 80px rgba(139, 92, 246, 0.6), 0 0 160px rgba(99, 102, 241, 0.3); }
+}
+
+@keyframes fusionExplode {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(3); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+/* Birth flash */
+.birth-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.3), transparent 70%);
+  z-index: 1001;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.birth-flash.active {
+  animation: birthFlash 0.8s ease-out forwards;
+}
+
+@keyframes birthFlash {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* New module reveal in deliberation */
+.new-module-reveal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+.new-module-reveal.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.new-module-reveal .reveal-name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c4b5fd, #818cf8, #f0abfc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.new-module-reveal .reveal-archetype {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-primary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.new-module-reveal .reveal-output {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  max-width: 400px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* ── Lineage Canvas ──────────────────────────────────────── */
+#lineage-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Module Detail Expanded View ─────────────────────────── */
+.module-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 6, 14, 0.85);
+  backdrop-filter: blur(16px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.module-detail-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.module-detail {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  max-width: 600px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+  animation: detailAppear 0.5s ease both;
+}
+
+.module-detail::-webkit-scrollbar {
+  width: 6px;
+}
+
+.module-detail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.module-detail::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 3px;
+}
+
+@keyframes detailAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+}
+
+.detail-pattern {
+  width: 100%;
+  height: 180px;
+  display: block;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.detail-content {
+  padding: 24px 32px 32px;
+}
+
+.detail-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  z-index: 10;
+}
+
+.detail-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.detail-section {
+  margin-top: 20px;
+}
+
+.detail-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.detail-outputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-output-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+/* Personality detail bars */
+.detail-personality {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-trait {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detail-trait-name {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-trait-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.detail-trait-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.detail-trait-value {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  width: 35px;
+  text-align: right;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.4);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .module-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .convene-btn {
+    padding: 14px 28px;
+    font-size: 0.85rem;
+  }
+
+  .app-header {
+    padding: 32px 16px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .module-grid {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .convene-container {
+    bottom: 16px;
+  }
+}
+
+/* ── Card wake-up animation (during deliberation) ────────── */
+.module-card.awakened {
+  animation: cardAwaken 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes cardAwaken {
+  from {
+    box-shadow: var(--shadow-card);
+    border-color: var(--glass-border);
+  }
+  to {
+    box-shadow: var(--shadow-card), 0 0 20px var(--card-glow-color, var(--accent-glow));
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+/* ── Create Button on Cards ──────────────────────────────── */
+.card-create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.card-create-btn:hover {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
+}
+
+.card-create-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Creation Studio ─────────────────────────────────────── */
+.creation-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 6, 14, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.creation-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.creation-studio {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  max-width: 900px;
+  width: 95vw;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-card), 0 0 100px rgba(139, 92, 246, 0.08);
+  animation: detailAppear 0.5s ease both;
+  position: relative;
+}
+
+.creation-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  z-index: 10;
+}
+
+.creation-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.creation-header {
+  padding: 28px 32px 0;
+}
+
+.creation-module-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c4b5fd, #818cf8, #f0abfc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.creation-module-type {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.creation-canvas-wrap {
+  padding: 20px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+#creation-canvas {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #08080f;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+.creation-meta {
+  padding: 0 32px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  min-height: 20px;
+}
+
+.creation-controls {
+  display: flex;
+  gap: 12px;
+  padding: 20px 32px 28px;
+  flex-wrap: wrap;
+}
+
+.creation-btn {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.creation-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+.creation-btn:active {
+  transform: scale(0.98);
+}
+
+.creation-btn-secondary {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+}
+
+.creation-btn-secondary:hover {
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+.creation-btn-stop {
+  background: linear-gradient(135deg, #f43f5e, #e11d48);
+}
+
+.creation-btn-stop:hover {
+  box-shadow: 0 4px 20px rgba(244, 63, 94, 0.3);
+}
+
+/* ── Footer spacer for convene button ────────────────────── */
+.footer-spacer {
+  height: 100px;
+}

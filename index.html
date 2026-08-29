@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Committee — A self-evolving modular app where modules form committees to birth new modules through randomness and cross-pollination.">
+  <title>The Committee — Self-Evolving Modules</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+</head>
+<body>
+
+  <!-- Particle Background -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Lineage Canvas (for future lineage thread drawing) -->
+  <canvas id="lineage-canvas"></canvas>
+
+  <!-- Main App Container -->
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="app-header">
+      <h1 class="app-title">The Committee</h1>
+      <p class="app-subtitle">Each module births the next. Nothing is off the table.</p>
+      <p class="generation-counter" id="generation-counter">3 modules · generation 0</p>
+    </header>
+
+    <!-- Module Grid -->
+    <div class="module-grid" id="module-grid">
+      <!-- Module cards are dynamically inserted here -->
+    </div>
+
+    <!-- Footer Spacer (for the convene button) -->
+    <div class="footer-spacer"></div>
+
+  </div>
+
+  <!-- Convene the Committee Button -->
+  <div class="convene-container">
+    <button class="convene-btn" id="convene-btn">
+      Convene the Committee
+    </button>
+  </div>
+
+  <!-- Deliberation Theater (Modal Overlay) -->
+  <div class="deliberation-overlay">
+    <h2 class="deliberation-title">The Committee Deliberates</h2>
+    <div class="deliberation-stage">
+      <div class="fusion-core"></div>
+      <div class="new-module-reveal"></div>
+    </div>
+  </div>
+
+  <!-- Birth Flash Effect -->
+  <div class="birth-flash"></div>
+
+  <!-- Creation Studio (Full-screen modal for generative output) -->
+  <div class="creation-overlay" id="creation-overlay">
+    <div class="creation-studio" id="creation-studio">
+      <button class="creation-close" id="creation-close">&times;</button>
+      <div class="creation-header">
+        <div class="creation-module-name" id="creation-module-name"></div>
+        <div class="creation-module-type" id="creation-module-type"></div>
+      </div>
+      <div class="creation-canvas-wrap">
+        <canvas id="creation-canvas" width="800" height="600"></canvas>
+      </div>
+      <div class="creation-meta" id="creation-meta"></div>
+      <div class="creation-controls">
+        <button class="creation-btn" id="creation-regenerate">🎲 Roll Again</button>
+        <button class="creation-btn creation-btn-secondary" id="creation-play-sound">🔊 Generate Sound</button>
+        <button class="creation-btn creation-btn-stop" id="creation-stop-sound" style="display:none">⏹ Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Module Detail Overlay -->
+  <div class="module-detail-overlay" id="module-detail-overlay">
+    <div class="module-detail" id="module-detail">
+      <!-- Detail content dynamically inserted -->
+    </div>
+  </div>
+
+  <!-- Scripts (load order matters: dependencies first) -->
+  <script src="names.js"></script>
+  <script src="generators.js"></script>
+  <script src="modules.js"></script>
+  <script src="deliberation.js"></script>
+  <script src="audio.js"></script>
+  <script src="artgen.js"></script>
+  <script src="visuals.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
